@@ -25,6 +25,7 @@ app.get('/rec', function(req, res) {
 	// 		res.render("rec", {results: results})
 	// 	} 
 	// })
+	res.render('rec');
 });
 
 app.post('/rec', function(req, res) {
@@ -32,7 +33,7 @@ app.post('/rec', function(req, res) {
 });
 
 app.get('/my-list', function(req, res) {
-
+	res.render('my-list');
 })
 
 app.post('/my-list', function(req, res) {
@@ -40,7 +41,15 @@ app.post('/my-list', function(req, res) {
 })
 
 app.delete('/my-list', function(req, res) {
-	
+
+})
+
+app.get('/sign-up', function(req, res) {
+	res.render('sign-up');
+})
+
+app.get('/login', function(req, res) {
+	res.render('login');
 })
 
 app.listen(3000);

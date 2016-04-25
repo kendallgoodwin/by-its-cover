@@ -1,5 +1,13 @@
 
 
-navbar {
-	height: 500px;
+.navbar {
+	height: 100px;
+}
+
+h1 {
+	text-align: center;
+}
+
+h2 {
+	text-align: center;
 }
