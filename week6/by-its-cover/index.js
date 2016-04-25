@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var ejsLayouts = require('express-ejs-layouts');
 var session = require('express-session');
 var flash = require('connect-flash');
+var bcrypt = require('bcrypt');
 var db = require('./models');
 
 var app = express();
@@ -18,12 +19,23 @@ app.use(session({
 }));
 app.use(flash());
 
-// req.session.lastPage = '/login';
-// console.log(req.session.lastPage);
+app.use(function(req, res, next) {
+  if (req.session.userId) {
+    db.user.findById(req.session.userId).then(function(user) {
+      req.currentUser = user;
+      res.locals.currentUser = user;
+      next();
+    });
+  } else {
+    req.currentUser = false;
+    res.locals.currentUser = false;
+    next();
+  }
+});
 
 
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index', {alerts: req.flash()});
 })
 
 app.get('/rec', function(req, res) {
@@ -56,40 +68,49 @@ app.delete('/my-list', function(req, res) {
 })
 
 app.get('/sign-up', function(req, res) {
-	res.render('sign-up');
+	res.render('sign-up', {alerts: req.flash()});
 });
 
 app.post('/sign-up', function(req, res) {
 		db.user.findOrCreate({
 		where: {
 			username: req.body.username,
+			email: req.body.email
 		},
 		defaults: {
-			password: req.body.password,
-			email: req.body.email
+			password: req.body.password
 		}
 	}).spread(function(user, isNew) {
-		if (isNew) {
-			res.redirect('/rec')
-		} else {
-			req.flash('danger', 'username already taken');
-			res.redirect('/sign-up')
-		}
-		// res.redirect('/rec')
-	}).catch(function(err) {
-		res.send(err);
-	}); console.log(req.body);
+  	if (isNew) {
+    	res.redirect('/rec');
+  	} else {
+  		req.flash('danger', 'Username or email already in use.')
+    	res.redirect('/sign-up');
+  	}
+  }).catch(function(err) {
+    req.flash('danger', 'Username already taken. Please choose another name.');
+    res.redirect('/sign-up');
+  });
 });
 
 app.get('/login', function(req, res) {
-	res.render('login');
+	res.render('login', {alerts: req.flash()});
 });
 
 app.post('/login', function(req, res) {
-	db.user.findOne({where: {username: req.body.username, password: req.body.password}}.then(function(user) {
-		console.log(user);
-		res.redirect('/rec', {user: user});
-	}));
+  console.log("sign in:", req.body);
+  db.user.authenticate(req.body.username, req.body.password, function(err, user) {
+    if (user) {
+      req.session.userId = user.Id;
+      req.flash('success', 'Successfully logged in');
+      res.redirect('/rec');
+    }
+  });
+});
+
+app.get('/logout', function(req, res) {
+  req.session.userId = false;
+  res.redirect('/');
 });
 
 app.listen(3000);

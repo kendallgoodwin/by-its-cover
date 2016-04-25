@@ -11,3 +11,12 @@ h1 {
 h2 {
 	text-align: center;
 }
+
+ul {
+	list-style-type: none;
+}
+
+li {
+	display: inline;
+}
+

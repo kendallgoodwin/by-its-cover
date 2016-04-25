@@ -7,23 +7,32 @@
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../style.css">
 
 
 </head>
 <body>
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">
-        <img alt="By Its Cover" src="...">
-      </a>
-    </div>
-  </div>
-</nav>
+<% include nav %>
+<!-- <div>Current User: <%= currentUser.username %></div> -->
 
+<ul>
+	<li><a href="/rec"><i class="fa fa-4x fa-book" aria-hidden="true"></i></a></li>
+	<li><a href="/my-list"><i class="fa fa-4x fa-list" aria-hidden="true"></i></a></li>
+	<li><a href="/logout"><i class="fa fa-4x fa-sign-out" aria-hidden="true"></i></a></li>
+</ul>
+
+<div class="container">
+    <div class="container">
+      <% if (typeof alerts !== 'undefined') { %>
+        <% for (key in alerts) { %>
+          <% alerts[key].forEach(function(thisMsg) { %>
+            <div class="alert alert-<%= key %>"><%= thisMsg %></div>
+          <% }); %>
+        <% } %>
+      <% } %>
+</div>
 
 <%- body %>
 
