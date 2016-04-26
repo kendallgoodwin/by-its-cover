@@ -6,6 +6,8 @@ var flash = require('connect-flash');
 var bcrypt = require('bcrypt');
 var request = require('request');
 var db = require('./models');
+var selflink = require('./static/text-json/selflink.json');
+var test = require('./static/text-json/test.json');
 
 var app = express();
 
@@ -40,21 +42,70 @@ app.get('/', function(req, res) {
 })
 
 app.get('/rec', function(req, res) {
-	// var query = req.query.q;
+	console.log(test)
+	var body = test;
+	var booksInfo = [];
+	var count = 1;
 
-	// request('https://www.googleapis.com/books/v1/volumes?q=' + query, function(err, response, body) {
-	// 	var data = JSON.parse(body);
-	// 	if (!err && response.statusCode === 200 && data.Search) {
-	// 		var results= data.Search;
-	// 		res.render("rec", {results: results})
-	// 	} 
-	// })
-	res.render('rec');
+	for (i = 0; i < body.items.length; i++) {
+			var body2 = selflink;
+			// var body2 = JSON.parse(body2);
+			// console.log(body2);
+			var image = body2.volumeInfo.imageLinks.large;
+			var book = {};
+			book.title = body2.volumeInfo.title + ' ' + count;
+			book.author = body2.volumeInfo.authors[0];
+			book.description = body2.volumeInfo.description;
+			book.rating = body2.volumeInfo.averageRating;
+			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+			book.pageCount = body2.volumeInfo.pageCount;
+			book.image = body2.volumeInfo.imageLinks.large;
+
+			//go through body2, and create an object with all the info from it you want
+			//push that object into booksInfo
+			// booksInfo.push(book);
+			booksInfo.push(book);
+			count++;
+		}; 
+		res.render('rec', {book: booksInfo})
+	// request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
+	// 	var body = JSON.parse(body);
+	// 	var booksInfo = [];
+	// 	for (i = 0; i < body.items.length; i++) {
+	// 		request(body.items[i].selfLink, function(err2, response2, body2) {
+	// 		var body2 = JSON.parse(body2);
+	// 		console.log(body2);
+	// 		var image = body2.volumeInfo.imageLinks.large;
+	// 		// var book = {};
+	// 		// book.title = body2.volumeInfo.title;
+	// 		// book.author = body2.volumeInfo.authors[0];
+	// 		// book.description = body2.volumeInfo.description;
+	// 		// book.rating = body2.volumeInfo.averageRating;
+	// 		// book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+	// 		// book.pageCount = body2.volumeInfo.pageCount;
+	// 		// book.image = body2.volumeInfo.imageLinks.large;
+
+	// 		//go through body2, and create an object with all the info from it you want
+	// 		//push that object into booksInfo
+	// 		// booksInfo.push(book);
+			
+	// 		console.log(body.items.length);
+			
+	// 		});
+	// 		res.render('rec');
+	// 	}; 
+	// }); 
+	// //pass booksInfo into the view
+	
 });
 
 app.post('/rec', function(req, res) {
 
 });
+
+app.get('/bookdeets', function(req, res) {
+	res.render('bookdeets');
+})
 
 app.get('/my-list', function(req, res) {
 	// if (req.session.userId) {
