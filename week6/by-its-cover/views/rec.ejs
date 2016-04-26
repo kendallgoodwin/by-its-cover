@@ -36,7 +36,8 @@ window.onload = function(){
 		$('.book-cover').attr("src", books[current].image)
 	}
 
-	function details() {
+	function details(current) {
+		$('.book-cover').removeAttr('src');
 		console.log('details');
 	}
 
