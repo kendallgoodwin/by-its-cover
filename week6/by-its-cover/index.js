@@ -39,19 +39,18 @@ app.use(function(req, res, next) {
 
 app.get('/', function(req, res) {
 	res.render('index', {alerts: req.flash()});
-})
+});
 
-app.get('/rec', function(req, res) {
-	console.log(test)
+app.get('/rec/', function(req, res) {
 	var body = test;
 	var booksInfo = [];
-	var count = 1;
+	var count = 0;
 
 	for (i = 0; i < body.items.length; i++) {
 			var body2 = selflink;
 			// var body2 = JSON.parse(body2);
 			// console.log(body2);
-			var image = body2.volumeInfo.imageLinks.large;
+			// var image = body2.volumeInfo.imageLinks.large;
 			var book = {};
 			book.title = body2.volumeInfo.title + ' ' + count;
 			book.author = body2.volumeInfo.authors[0];
@@ -65,6 +64,8 @@ app.get('/rec', function(req, res) {
 			//push that object into booksInfo
 			// booksInfo.push(book);
 			booksInfo.push(book);
+			// console.log(booksInfo);
+			// console.log(booksInfo);
 			count++;
 		}; 
 		res.render('rec', {book: booksInfo})
@@ -182,35 +183,35 @@ app.get('/logout', function(req, res) {
 });
 
 
-app.get('/search', function(req, res) {
-	request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
-		var body = JSON.parse(body);
-		var booksInfo = [];
-		// for (i = 0; i < body.items.length; i++) {
-			request(body.items[1].selfLink, function(err2, response2, body2) {
-			var body2 = JSON.parse(body2);
-			// var image = body2.volumeInfo.imageLinks.large;
-			var book = {};
-			book.title = body2.volumeInfo.title;
-			book.author = body2.volumeInfo.authors[0];
-			book.description = body2.volumeInfo.description;
-			book.rating = body2.volumeInfo.averageRating;
-			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-			book.pageCount = body2.volumeInfo.pageCount;
-			book.image = body2.volumeInfo.imageLinks.large;
+// app.get('/search', function(req, res) {
+// 	request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
+// 		var body = JSON.parse(body);
+// 		var booksInfo = [];
+// 		// for (i = 0; i < body.items.length; i++) {
+// 			request(body.items[1].selfLink, function(err2, response2, body2) {
+// 			var body2 = JSON.parse(body2);
+// 			// var image = body2.volumeInfo.imageLinks.large;
+// 			var book = {};
+// 			book.title = body2.volumeInfo.title;
+// 			book.author = body2.volumeInfo.authors[0];
+// 			book.description = body2.volumeInfo.description;
+// 			book.rating = body2.volumeInfo.averageRating;
+// 			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+// 			book.pageCount = body2.volumeInfo.pageCount;
+// 			book.image = body2.volumeInfo.imageLinks.large;
 
-			//go through body2, and create an object with all the info from it you want
-			//push that object into booksInfo
-			booksInfo.push(book);
-			console.log(booksInfo);
-			console.log(body.items.length);
-			res.render('rec', {book: book});
-			});
-		// }; 
-	}); 
-	//pass booksInfo into the view
+// 			//go through body2, and create an object with all the info from it you want
+// 			//push that object into booksInfo
+// 			booksInfo.push(book);
+// 			console.log(booksInfo);
+// 			console.log(body.items.length);
+// 			res.render('rec', {book: book});
+// 			});
+// 		// }; 
+// 	}); 
+// 	//pass booksInfo into the view
 	
-});
+// });
 
 
 app.listen(3000);

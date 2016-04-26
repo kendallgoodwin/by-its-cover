@@ -2,15 +2,16 @@
 	<!-- <div class="col-md-8 col-md-offset-2"> -->
 		<!-- <h1>Recommendation</h1> -->
 		<div class="col-md-2 col-md-offset-1">
-			<i class="fa fa-5x fa-arrow-circle-o-left" aria-hidden="true"></i>
+			<a class="dismiss-book left" href="#"><i class="fa fa-5x fa-arrow-circle-o-left" aria-hidden="true"></i></a>
 		</div>
 			<div class="col-md-5">
 				<div class="cover-frame">
-					<img src="<%= book.image %>">
+					<h2 class="book-title"><%= book[0].title %></h2>
+					<img class="book-cover" src="<%= book[0].image %>">	
 				</div>
 			</div>
 		<div class="col-md-2 col-md-offset-1">
-			<a href="/bookdeets"><i class="fa fa-5x fa-arrow-circle-o-right" aria-hidden="true"></i></a>
+			<a class="show-details" href="#"><i class="fa fa-5x fa-arrow-circle-o-right" aria-hidden="true"></i></a>
 		</div>
 	<!-- </div> -->
 </div>
@@ -18,3 +19,29 @@
 <!-- image space for population of book covers
 left arrow to retrieve a new book cover image
 right arrow to retrieve deets for selected book cover image -->
+
+<script>
+var books = <%- JSON.stringify(book) %>;
+var current = 0;
+
+window.onload = function(){
+	console.log("ready", $)	
+
+	$('.dismiss-book').on('click', dismiss)
+	$('.show-details').on('click', details)
+
+	function dismiss() {
+		current++;
+		$('.book-title').text(books[current].title)
+		$('.book-cover').attr("src", books[current].image)
+	}
+
+	function details() {
+		console.log('details');
+	}
+
+	function displayBook(i) {
+	  
+	}
+}
+</script>
