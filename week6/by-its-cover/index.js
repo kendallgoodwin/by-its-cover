@@ -4,6 +4,7 @@ var ejsLayouts = require('express-ejs-layouts');
 var session = require('express-session');
 var flash = require('connect-flash');
 var bcrypt = require('bcrypt');
+var request = require('request');
 var db = require('./models');
 
 var app = express();
@@ -56,8 +57,20 @@ app.post('/rec', function(req, res) {
 });
 
 app.get('/my-list', function(req, res) {
-	res.render('my-list');
-})
+	// if (req.session.userId) {
+ //    db.user.findById(req.session.userId).then(function(user) {
+ //      req.currentUser = user;
+ //      res.locals.currentUser = user;
+ //      next();
+ //    });
+ //  	} else {
+ //    req.currentUser = false;
+ //    res.locals.currentUser = false;
+ //    next();
+ //  }
+ 	res.render('my-list');
+});
+
 
 app.post('/my-list', function(req, res) {
 
@@ -82,6 +95,7 @@ app.post('/sign-up', function(req, res) {
 		}
 	}).spread(function(user, isNew) {
   	if (isNew) {
+  		req.session.userId = user.id;
     	res.redirect('/rec');
   	} else {
   		req.flash('danger', 'Username or email already in use.')
@@ -101,9 +115,12 @@ app.post('/login', function(req, res) {
   console.log("sign in:", req.body);
   db.user.authenticate(req.body.username, req.body.password, function(err, user) {
     if (user) {
-      req.session.userId = user.Id;
+      req.session.userId = user.id;
       req.flash('success', 'Successfully logged in');
       res.redirect('/rec');
+    } else {
+    	req.flash('danger', 'Incorrect username or password');
+    	res.redirect('/login');
     }
   });
 });
@@ -112,6 +129,35 @@ app.get('/logout', function(req, res) {
   req.session.userId = false;
   res.redirect('/');
 });
+
+
+app.get('/search', function(req, res) {
+	request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
+		body = JSON.parse(body);
+		var booksInfo = [];
+		// for (i = 0; i < body.items.length; i++) {
+			request(body.items[0].selfLink, function(err2, response2, body2) {
+			body2 = JSON.parse(body2);
+			var image = body2.volumeInfo.imageLinks.large;
+			// var book = {};
+			// book.title = body2.volumeInfo.title;
+			// book.author = body2.volumeInfo.authors;
+			// book.description = body2.volumeInfo.description;
+			// book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+			// book.pageCount = body2.volumeInfo.pageCount;
+			// book.image = body2.volumeInfo.imageLinks.large;
+
+			//go through body2, and create an object with all the info from it you want
+			//push that object into booksInfo
+			// booksInfo.push(book);
+			res.render('rec', {image: image});
+			});
+		// };
+	});
+	//pass booksInfo into the view
+	
+});
+
 
 app.listen(3000);
 

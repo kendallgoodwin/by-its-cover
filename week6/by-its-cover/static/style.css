@@ -20,3 +20,8 @@ li {
 	display: inline;
 }
 
+.cover-frame {
+	max-height: 462px;
+	max-width: 300px;
+}
+
