@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       isbn: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       rating: {
         type: Sequelize.INTEGER
