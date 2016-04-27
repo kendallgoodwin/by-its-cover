@@ -1,6 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var favorite = sequelize.define('favorite', {
+    userId: DataTypes.STRING,
     title: DataTypes.STRING,
     author: DataTypes.STRING,
     isbn: DataTypes.STRING,
@@ -11,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        models.favorite.belongsTo(models.user);
       }
     }
   });

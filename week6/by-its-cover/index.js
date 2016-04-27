@@ -211,6 +211,7 @@ app.post('/login', function(req, res) {
 
 app.get('/logout', function(req, res) {
   req.session.userId = false;
+  req.flash('success', 'You are now logged out');
   res.redirect('/');
 });
 
