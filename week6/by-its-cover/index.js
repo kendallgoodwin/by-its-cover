@@ -46,45 +46,48 @@ app.get('/rec', function(req, res) {
 	var booksInfo = [];
 	var count = 0;
 
-	for (i = 0; i < body.items.length; i++) {
-			var body2 = selflink;
-			// var body2 = JSON.parse(body2);
-			// console.log(body2);
-			// var image = body2.volumeInfo.imageLinks.large;
-			var book = {};
-			book.title = body2.volumeInfo.title + ' ' + count;
-			book.author = body2.volumeInfo.authors[0];
-			book.description = body2.volumeInfo.description;
-			book.rating = Math.round(body2.volumeInfo.averageRating);
-			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-			book.pageCount = body2.volumeInfo.pageCount;
-			book.image = body2.volumeInfo.imageLinks.large;
+	// console.log("limitText definition")
+	var limitText = function(str) {
+	  var splitString = str.split('.');
+	  var newString = [];
+	  // console.log("splitlen:", splitString.length)
+	   for (var i = 0; i < splitString.length; i++) {
+	   		if (i < 3) {
+				newString.push(splitString[i]);
+			}  
+		}
+		var shortSen = newString.join('. ');
+		return shortSen;
+	};
 
-			var description = body2.volumeInfo.description;
-			description = description.replace(/<(?:.|\n)*?>/gm, '');
-			book.description = description;
+	for (var i = 0; i < body.items.length; i++) {
+		var body2 = selflink;
+		// var body2 = JSON.parse(body2);
+		// console.log(body2);
+		// var image = body2.volumeInfo.imageLinks.large;
+		var book = {};
+		book.title = body2.volumeInfo.title + ' ' + count;
+		book.author = body2.volumeInfo.authors[0];
+		book.description = body2.volumeInfo.description;
+		book.rating = Math.round(body2.volumeInfo.averageRating);
+		book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+		book.pageCount = body2.volumeInfo.pageCount;
+		book.image = body2.volumeInfo.imageLinks.large;
 
-			// var limitText = function(str) {
-			//   var splitString = str.split('.');
-			//   var newString = [];
-			//    for (i = 0; i < splitString.length; i++) {
-			//    		if (i < 3) {
-			// 			newString.push(splitString[i]);
-			// 		}  
-			// 	}
-			// 	var shortSen = newString.join('. ');
-			// 	return shortSen;
-			// };
+		var description = body2.volumeInfo.description;
+		description = description.replace(/<(?:.|\n)*?>/gm, '');
+		book.description = description;
 
-			// book.description = limitText(description);
+		// console.log(i, "calling limitText", description);
+		book.description = limitText(description);
 
-			// booksInfo.push(book);
-			booksInfo.push(book);
-			// console.log(booksInfo);
-			// console.log(booksInfo);
-			count++;
-		}; 
-		res.render('rec', {book: booksInfo, alerts: req.flash()})
+		// booksInfo.push(book);
+		booksInfo.push(book);
+		// console.log(booksInfo);
+		// console.log(booksInfo);
+		count++;
+	} 
+	res.render('rec', {book: booksInfo, alerts: req.flash()})
 	// request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
 	// 	var body = JSON.parse(body);
 	// 	var booksInfo = [];
@@ -163,8 +166,12 @@ app.get('/sign-up', function(req, res) {
 app.post('/sign-up', function(req, res) {
 		db.user.findOrCreate({
 		where: {
-			username: req.body.username,
-			email: req.body.email
+   			$or: [{username: username}, {email: email}]
+ 	// 	}
+
+		// where: {
+		// 	username: req.body.username,
+		// 	email: req.body.email
 		},
 		defaults: {
 			password: req.body.password

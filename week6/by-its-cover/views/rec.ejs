@@ -12,7 +12,7 @@
 						<p class="isbn">ISBN <%= book[0].isbn %></p>
 						<p class="rating">Average rating: <%= book[0].rating %></p>
 						<p class="pageCount"><%= book[0].pageCount %> pages</p>
-						<p class="description"><%= book[0].description %></p>
+						<p class="description"><%= book[0].description %>.</p>
 						</p>
 						<button class="btn btn-default" id="previous">Go Back</button>
 						<form action="/my-list" method="POST" id="form">
@@ -78,7 +78,7 @@ window.onload = function(){
 		$('.isbn').text('ISBN ' + books[current].isbn);
 		$('.rating').text('Average rating: ' + books[current].rating);
 		$('.pageCount').text(books[current].pageCount + ' pages');
-		$('.description').text(books[current].description);
+		$('.description').text(books[current].description + '.');
 		$('.details').show();
 		console.log('details');
 	}
