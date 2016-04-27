@@ -166,7 +166,7 @@ app.get('/sign-up', function(req, res) {
 app.post('/sign-up', function(req, res) {
 		db.user.findOrCreate({
 		where: {
-   			$or: [{username: username}, {email: email}]
+   			$or: [{username: req.body.username}, {email: req.body.email}]
  	// 	}
 
 		// where: {
