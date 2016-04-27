@@ -1,16 +1,24 @@
 <div class="container-fluid">
 	<!-- <div class="col-md-8 col-md-offset-2"> -->
 		<!-- <h1>Recommendation</h1> -->
-		<div class="col-md-2 col-md-offset-1">
+		<div class="col-md-2">
 			<a class="dismiss-book left" href="#"><i class="fa fa-5x fa-arrow-circle-o-left" aria-hidden="true"></i></a>
 		</div>
-			<div class="col-md-5">
+			<div class="col-md-8">
 				<div class="cover-frame">
-					<h2 class="book-title"><%= book[0].title %></h2>
+					<div class="details">
+						<p class="title"><%= book[0].title %></p>
+						<p class="author">by <%= book[0].author %><p>
+						<p class="isbn">ISBN <%= book[0].isbn %></p>
+						<p class="rating">Average rating: <%= book[0].rating %></p>
+						<p class="pageCount"><%= book[0].pageCount %> pages</p>
+						<p class="description"><%= book[0].description %></p>
+						</p>
+					</div>
 					<img class="book-cover" src="<%= book[0].image %>">	
 				</div>
 			</div>
-		<div class="col-md-2 col-md-offset-1">
+		<div class="col-md-2">
 			<a class="show-details" href="#"><i class="fa fa-5x fa-arrow-circle-o-right" aria-hidden="true"></i></a>
 		</div>
 	<!-- </div> -->
@@ -27,6 +35,7 @@ var current = 0;
 window.onload = function(){
 	console.log("ready", $)	
 
+	$('.details').hide();
 	$('.dismiss-book').on('click', dismiss)
 	$('.show-details').on('click', details)
 
@@ -36,8 +45,16 @@ window.onload = function(){
 		$('.book-cover').attr("src", books[current].image)
 	}
 
-	function details(current) {
-		$('.book-cover').removeAttr('src');
+	function details() {
+		//current++
+		$('.book-cover').hide();
+		$('.title').text(books[current].title);
+		$('.author').text('by ' + books[current].author);
+		$('.isbn').text(books[current].isbn);
+		$('.rating').text('Average rating: ' + books[current].rating);
+		$('.pageCount').text(books[current].pageCount + ' pages');
+		$('.description').text(books[current].description);
+		$('.details').show();
 		console.log('details');
 	}
 

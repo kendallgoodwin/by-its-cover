@@ -60,8 +60,24 @@ app.get('/rec/', function(req, res) {
 			book.pageCount = body2.volumeInfo.pageCount;
 			book.image = body2.volumeInfo.imageLinks.large;
 
-			//go through body2, and create an object with all the info from it you want
-			//push that object into booksInfo
+			var description = body2.volumeInfo.description;
+			description = description.replace(/<(?:.|\n)*?>/gm, '');
+			
+
+			// var limitText = function(str) {
+			//   var splitString = str.split('.');
+			//   var newString = [];
+			//    for (i = 0; i < splitString.length; i++) {
+			//    		if (i < 3) {
+			// 			newString.push(splitString[i]);
+			// 		}  
+			// 	}
+			// 	var shortSen = newString.join('. ');
+			// 	return shortSen;
+			// };
+
+			// book.description = limitText(description);
+
 			// booksInfo.push(book);
 			booksInfo.push(book);
 			// console.log(booksInfo);

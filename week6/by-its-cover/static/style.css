@@ -22,6 +22,19 @@ li {
 
 .cover-frame {
 	max-height: 462px;
-	max-width: 362px;
+	width: 500px;
+	text-align: center;
+}
+
+.details {
+	max-height: 462px;
+	width: 500px;
+	border: 1px solid black;
+	display: none;
+}
+
+.book-cover {
+	max-height: 462px;
+	max-width: 400px;
 }
 
