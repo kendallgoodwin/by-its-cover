@@ -62,7 +62,7 @@ app.get('/rec/', function(req, res) {
 
 			var description = body2.volumeInfo.description;
 			description = description.replace(/<(?:.|\n)*?>/gm, '');
-			
+			book.description = description;
 
 			// var limitText = function(str) {
 			//   var splitString = str.split('.');
