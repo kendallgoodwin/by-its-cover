@@ -55,7 +55,7 @@ app.get('/rec/', function(req, res) {
 			book.title = body2.volumeInfo.title + ' ' + count;
 			book.author = body2.volumeInfo.authors[0];
 			book.description = body2.volumeInfo.description;
-			book.rating = Math.ceil(body2.volumeInfo.averageRating);
+			book.rating = Math.round(body2.volumeInfo.averageRating);
 			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
 			book.pageCount = body2.volumeInfo.pageCount;
 			book.image = body2.volumeInfo.imageLinks.large;

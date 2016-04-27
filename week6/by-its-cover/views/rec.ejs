@@ -14,6 +14,7 @@
 						<p class="pageCount"><%= book[0].pageCount %> pages</p>
 						<p class="description"><%= book[0].description %></p>
 						</p>
+						<button class="btn btn-default" id="previous">Go Back</button>
 						<form action="/my-list" method="POST" id="form">
 							<input type="hidden" name="title" id="title" value="<%= book[0].title %>" />
 							<input type="hidden" name="author" id="author" value="<%= book[0].author %>" />
@@ -22,7 +23,7 @@
 							<input type="hidden" name="pageCount" id="pageCount" value="<%= book[0].pageCount %>" />
 							<input type="hidden" name="description" id="description" value="<%= book[0].description %>" />
 							<input type="hidden" name="image" id="image" value="<%= book[0].image %>" />
-							<button class="add-favorite-btn" type="submit">Add To My List</button>
+							<button id="add-favorite-btn" class="btn btn-default" type="submit">Add To My List</button>
 						</form>
 					</div>
 					<img class="book-cover" src="<%= book[0].image %>">	
@@ -49,7 +50,8 @@ window.onload = function(){
 	$('.details').hide();
 	$('.dismiss-book').on('click', dismiss)
 	$('.show-details').on('click', details)
-	$('.add-favorite-btn').on('click', submitDetails)
+	$('#add-favorite-btn').on('click', submitDetails)
+	$('#previous').on('click', previous)
 
 	function submitDetails() {
 		$('#title').val(books[current].title);
@@ -81,8 +83,9 @@ window.onload = function(){
 		console.log('details');
 	}
 
-	function displayBook(i) {
-	  
+	function previous() {
+		$('.details').hide();
+		$('.book-cover').show();
 	}
 }
 </script>
