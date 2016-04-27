@@ -41,7 +41,7 @@ app.get('/', function(req, res) {
 	res.render('index', {alerts: req.flash()});
 });
 
-app.get('/rec/', function(req, res) {
+app.get('/rec', function(req, res) {
 	var body = test;
 	var booksInfo = [];
 	var count = 0;
@@ -84,7 +84,7 @@ app.get('/rec/', function(req, res) {
 			// console.log(booksInfo);
 			count++;
 		}; 
-		res.render('rec', {book: booksInfo})
+		res.render('rec', {book: booksInfo, alerts: req.flash()})
 	// request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
 	// 	var body = JSON.parse(body);
 	// 	var booksInfo = [];
@@ -114,13 +114,6 @@ app.get('/rec/', function(req, res) {
 	
 });
 
-app.post('/rec', function(req, res) {
-
-});
-
-app.get('/bookdeets', function(req, res) {
-	res.render('bookdeets');
-})
 
 app.get('/my-list', function(req, res) {
 	// if (req.session.userId) {
@@ -156,6 +149,13 @@ app.delete('/my-list', function(req, res) {
 
 })
 
+app.get('my-list/:isbn', function(req, res) {
+	var isbn = req.params.isbn;
+	db.favorite.findOne({where: {isbn: isbn}}).then(function(favorite) {
+		res.render('favoriteInfo', {favorite: favorite});
+	});
+});
+
 app.get('/sign-up', function(req, res) {
 	res.render('sign-up', {alerts: req.flash()});
 });
@@ -172,6 +172,7 @@ app.post('/sign-up', function(req, res) {
 	}).spread(function(user, isNew) {
   	if (isNew) {
   		req.session.userId = user.id;
+  		req.flash('success', 'Yay! You have successfully created an account!');
     	res.redirect('/rec');
   	} else {
   		req.flash('danger', 'Username or email already in use.')
