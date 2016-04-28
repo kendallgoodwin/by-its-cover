@@ -1,10 +1,16 @@
-
+<div class="container">
+<div class="col-md-8 col-md-offset-3">
 <h1>My List</h1>
 
+<div class="fav-list">
 <% favorites.forEach(function(favorite) { %>
-	
-
-<p>
-<%= favorite.title %>
-</p>
+	<img class="thumbnail" src="<%= favorite.image %>">
+	<h3><%= favorite.title %></h3><br>
+	<h4>by <%= favorite.author %></h4>	
+	<button id="delete-btn" class="btn btn-default" type="submit">Remove from My List</button>		
 <% }); %>
+	<div>
+</div>
+
+</div>
+

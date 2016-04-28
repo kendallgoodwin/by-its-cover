@@ -10,6 +10,16 @@ h2 {
 	text-align: center;
 }
 
+h3 {
+	float: left;
+	width: 75%;
+}
+
+h4 {
+	float: left;
+	width: 75%;
+}
+
 ul {
 	list-style-type: none;
 }
@@ -23,17 +33,18 @@ li {
 	max-height: 462px;
 	width: 500px;
 	text-align: center;
+	margin-top: 50px;
 }
 
 .details {
-	max-height: 462px;
+	max-height: 500px;
 	width: 500px;
-	border: 1px solid black;
+	border: 1px solid #1aa3a3;
 	display: none;
 }
 
 .book-cover {
-	max-height: 462px;
+	max-height: 500px;
 	max-width: 400px;
 }
 
@@ -54,6 +65,32 @@ li {
 .landing {
 	margin-top: 100px;
 }
+
+
+
+/*//////my-list.ejs//////*/
+
+.fav-list {
+	/*max-height: 200px;*/
+	/*background-image: #0b5e56;*/
+}
+
+.thumbnail {
+/*	width: 150px;*/
+	height: 150px;
+	float: left;
+	margin-right: 20px;
+	/*float: left;*/
+}
+
+.delete-btn {
+	float: right;
+	/*display: block;*/
+	/*position: absolute;*/
+}
+
+
+/*//////media-queries//////*/
 
 @media (min-width: 768px) {
   .bs-sidebar.affix {
