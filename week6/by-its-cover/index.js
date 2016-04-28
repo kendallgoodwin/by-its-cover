@@ -41,6 +41,29 @@ app.get('/', function(req, res) {
 	res.render('index', {alerts: req.flash()});
 });
 
+app.post ('/', function(req, res) {
+		db.user.findOrCreate({
+		where: {
+   			$or: [{username: req.body.username}, {email: req.body.email}]
+		},
+		defaults: {
+			password: req.body.password
+		}
+	}).spread(function(user, isNew) {
+  	if (isNew) {
+  		req.session.userId = user.id;
+  		req.flash('success', 'Yay! You have successfully created an account!');
+    	res.redirect('/rec');
+  	} else {
+  		req.flash('danger', 'Username or email already in use.')
+    	res.redirect('/sign-up');
+  	}
+  }).catch(function(err) {
+    req.flash('danger', 'Username already taken. Please choose another name.');
+    res.redirect('/sign-up');
+  });
+});
+
 app.get('/rec', function(req, res) {
 	var body = test;
 	var booksInfo = [];
