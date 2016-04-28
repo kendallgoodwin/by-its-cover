@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var favorite = sequelize.define('favorite', {
-    userId: DataTypes.STRING,
+    userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     author: DataTypes.STRING,
     isbn: DataTypes.STRING,

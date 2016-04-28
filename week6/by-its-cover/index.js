@@ -118,24 +118,33 @@ app.get('/rec', function(req, res) {
 });
 
 
-app.get('/my-list', function(req, res) {
-	// if (req.session.userId) {
- //    db.user.findById(req.session.userId).then(function(user) {
- //      req.currentUser = user;
- //      res.locals.currentUser = user;
- //      next();
- //    });
- //  	} else {
- //    req.currentUser = false;
- //    res.locals.currentUser = false;
- //    next();
- //  }
- 	res.render('my-list');
+app.get('/my-list/:id', function(req, res) { 
+	var userId = parseInt(req.params.id);
+	db.user.findOne({
+		where: {
+			id: userId
+		}
+	}).then(function(user) {
+		console.log(user)
+		user.getFavorites().then(function(favorites) {
+			res.render('my-list', {user: user, favorites: favorites});
+		});
+	});
+
+
+	// db.favorite.findAll().then(function(favorites) {
+	// 	res.render("my-list", {favorites: favorites});
+	// });
 });
 
 
-app.post('/my-list', function(req, res) {
-		db.favorite.create({
+app.post('/my-list', function(req, res) {	
+	if (!req.body.userId) {
+		return res.redirect('/login');
+	}
+
+	db.favorite.create({
+		userId: req.body.userId,
 		title: req.body.title,
 		author: req.body.author,
 		isbn: req.body.isbn,
@@ -144,7 +153,7 @@ app.post('/my-list', function(req, res) {
 		description: req.body.description,
 		image: req.body.image
 	}).then(function() {
-		res.redirect("/my-list");
+		res.redirect("/my-list/"+ req.body.userId);
 	})
 });
 
@@ -152,12 +161,12 @@ app.delete('/my-list', function(req, res) {
 
 })
 
-app.get('my-list/:isbn', function(req, res) {
-	var isbn = req.params.isbn;
-	db.favorite.findOne({where: {isbn: isbn}}).then(function(favorite) {
-		res.render('favoriteInfo', {favorite: favorite});
-	});
-});
+// app.get('my-list/:isbn', function(req, res) {
+// 	var isbn = req.params.isbn;
+// 	db.favorite.findOne({where: {isbn: isbn}}).then(function(favorite) {
+// 		res.render('favoriteInfo', {favorite: favorite});
+// 	});
+// });
 
 app.get('/sign-up', function(req, res) {
 	res.render('sign-up', {alerts: req.flash()});
@@ -167,11 +176,6 @@ app.post('/sign-up', function(req, res) {
 		db.user.findOrCreate({
 		where: {
    			$or: [{username: req.body.username}, {email: req.body.email}]
- 	// 	}
-
-		// where: {
-		// 	username: req.body.username,
-		// 	email: req.body.email
 		},
 		defaults: {
 			password: req.body.password
@@ -197,14 +201,18 @@ app.get('/login', function(req, res) {
 
 app.post('/login', function(req, res) {
   console.log("sign in:", req.body);
-  db.user.authenticate(req.body.username, req.body.password, function(err, user) {
-    if (user) {
-      req.session.userId = user.id;
-      req.flash('success', 'Successfully logged in');
-      res.redirect('/rec');
+  var username = req.body.username;
+  var password = req.body.password;
+  db.user.authenticate(username, password, function(err, user) {
+    if (err) {
+    	res.send(err);
+    } else if (user) {
+		req.session.userId = user.id;
+		req.flash('success', 'Successfully logged in');
+		res.redirect('/rec');
     } else {
-    	req.flash('danger', 'Incorrect username or password');
-    	res.redirect('/login');
+		req.flash('danger', 'Incorrect username or password');
+		res.redirect('/login');
     }
   });
 });

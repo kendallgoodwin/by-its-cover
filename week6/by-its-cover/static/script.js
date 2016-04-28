@@ -8,3 +8,9 @@ $( document ).ready(function() {
     console.log( "ready!" );
 });
 
+$('#sidebar').affix({
+  offset: {
+    top: $('header').height()
+  }
+}); 
+
