@@ -159,6 +159,8 @@ li {
 	/*background-image: #0b5e56;*/
 	height: 175px;
 	border: 1px solid black;
+	margin-top: 20px;
+	/*display: block;*/
 }
 
 .thumbnail {

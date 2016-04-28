@@ -14,3 +14,16 @@ $('#sidebar').affix({
   }
 }); 
 
+
+$('.delete-btn').on('click', function(e) {
+	e.preventDefault();
+	var favoriteId = $(this).attr('data-favorite-id');
+	var that = this;
+	$.ajax({
+		method: 'DELETE',
+		url: '/my-list/' + favoriteId,
+		success: function(){
+			$(that).parent().parent().parent().remove();
+		}
+	});
+});

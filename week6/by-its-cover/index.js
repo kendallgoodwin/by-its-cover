@@ -69,7 +69,6 @@ app.get('/rec', function(req, res) {
 	var booksInfo = [];
 	var count = 0;
 
-	// console.log("limitText definition")
 	var limitText = function(str) {
 	  var splitString = str.split('.');
 	  var newString = [];
@@ -141,30 +140,29 @@ app.get('/rec', function(req, res) {
 });
 
 
-app.get('/my-list/:id', function(req, res) { 
-	var userId = parseInt(req.params.id);
-	db.user.findOne({
-		where: {
-			id: userId
-		}
-	}).then(function(user) {
-		console.log(user)
-		user.getFavorites().then(function(favorites) {
-			res.render('my-list', {user: user, favorites: favorites});
+app.get('/my-list', function(req, res) { 
+	if (req.currentUser) {
+
+		var userId = req.currentUser.id;
+		db.user.findOne({
+			where: {
+				id: userId
+			}
+		}).then(function(user) {
+			console.log(user)
+			user.getFavorites().then(function(favorites) {
+				res.render('my-list', {user: user, favorites: favorites});
+			});
 		});
-	});
-
-
-	// db.favorite.findAll().then(function(favorites) {
-	// 	res.render("my-list", {favorites: favorites});
-	// });
+	} else {
+		req.flash('danger', 'You must be logged in to view lists');
+		res.redirect('/');
+	}
 });
 
 
 app.post('/my-list', function(req, res) {	
-	if (!req.body.userId) {
-		return res.redirect('/login');
-	}
+	if (req.currentUser) {
 
 	db.favorite.create({
 		userId: req.body.userId,
@@ -176,20 +174,36 @@ app.post('/my-list', function(req, res) {
 		description: req.body.description,
 		image: req.body.image
 	}).then(function() {
-		res.redirect("/my-list/"+ req.body.userId);
-	})
+		res.redirect("/my-list");
+	}) 
+	} else {
+		req.flash('danger', 'You must be logged in to view lists');
+	}
 });
 
-app.delete('/my-list', function(req, res) {
+app.get('/my-list/:id/:isbn', function(req, res) {
+	// if (!req.body.userId) {
+	// 	return res.redirect('/login');
+	// }
 
-})
+	var userId = req.params.id;
+	var isbn = req.params.isbn;
+	db.user.findOne({where: {id: userId}}).then(function(user) {
+		user.getFavorites({where: {isbn: isbn}}).then(function(favorite) {
+				res.render('favoriteInfo', {favorite: favorite});
+			});
+	});
+});
 
-// app.get('my-list/:isbn', function(req, res) {
-// 	var isbn = req.params.isbn;
-// 	db.favorite.findOne({where: {isbn: isbn}}).then(function(favorite) {
-// 		res.render('favoriteInfo', {favorite: favorite});
-// 	});
-// });
+app.delete("/my-list/:favoriteId", function(req, res) {
+	var favoriteId = req.params.favoriteId;
+
+		db.favorite.destroy({where: {id: favoriteId}}).then(function(favorite) {
+			res.status(200).send('Deleted favorite');
+		});
+});
+
+
 
 app.get('/sign-up', function(req, res) {
 	res.render('sign-up', {alerts: req.flash()});
@@ -223,7 +237,6 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-  console.log("sign in:", req.body);
   var username = req.body.username;
   var password = req.body.password;
   db.user.authenticate(username, password, function(err, user) {

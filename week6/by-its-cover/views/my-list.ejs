@@ -2,15 +2,20 @@
 <div class="col-md-8 col-md-offset-3">
 <h1>My List</h1>
 
-<div class="fav-list">
+
 <% favorites.forEach(function(favorite) { %>
-	<img class="thumbnail" src="<%= favorite.image %>">
-	<h3><%= favorite.title %></h3><br>
+
+<div class="row">
+<div class="fav-list">
+	<a href="/my-list/<%= currentUser.id %>/<%= favorite.isbn %>"><img class="thumbnail" src="<%= favorite.image %>"></a>
+	<a href="/my-list/<%= currentUser.id %>/<%= favorite.isbn %>"><h3><%= favorite.title %></h3></a><br>
 	<h4>by <%= favorite.author %></h4>	
-	<p><%= favorite.rating %></p>
-	<button id="delete-btn" class="btn btn-default" type="submit">Remove from My List</button>		
+	<a href="/my-list %>" class="delete-link"><button class="btn btn-default delete-btn" type="submit" data-favorite-id="<%= favorite.id %>">Remove from My List</button></a>	
+</div>
+</div>
+
 <% }); %>
-	<div>
+	
 </div>
 
 </div>
