@@ -67,6 +67,10 @@ app.post ('/', function(req, res) {
   });
 });
 
+app.get('/about', function(req, res) {
+	res.render('about', {alerts: req.flash()});
+})
+
 app.get('/rec', function(req, res) {
 	var booksInfo = [];
 	var counter = 0;
