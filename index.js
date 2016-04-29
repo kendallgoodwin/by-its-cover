@@ -69,6 +69,8 @@ app.post ('/', function(req, res) {
 
 app.get('/rec', function(req, res) {
 	var booksInfo = [];
+	var counter = 0;
+	var googleLink = 'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=10'
 
 	var limitText = function(str) {
 	  var splitString = str.split('.');
@@ -81,7 +83,7 @@ app.get('/rec', function(req, res) {
 		var shortSen = newString.join('. ');
 		return shortSen;
 	};
-request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=10', function(err, response, body) {
+request(googleLink, function(err, response, body) {
 	var body = JSON.parse(body);
 	for (var i = 0; i < body.items.length; i++) {
 		request(body.items[i].selfLink, function(err2, response2, body2) {
@@ -100,61 +102,14 @@ request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startInde
 			book.description = limitText(description);
 			// book.description = limitText(description);
 			booksInfo.push(book);
-		})
-		
-	};
-		
+			counter++
 
-// 	for (var i = 0; i < body.items.length; i++) {
-// 		request(body.items[i].selfLink, function(err2, response2, body2) {
-// 			var body2 = JSON.parse(body2);
-// 			var book = {};
-// 			book.title = body2.volumeInfo.title;
-// 			book.author = body2.volumeInfo.authors[0];
-// 			book.description = body2.volumeInfo.description;
-// 			book.rating = Math.round(body2.volumeInfo.averageRating);
-// 			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-// 			book.pageCount = body2.volumeInfo.pageCount;
-// 			book.image = body2.volumeInfo.imageLinks.large;
-
-// 			var description = body2.volumeInfo.description;
-// 			description = description.replace(/<(?:.|\n)*?>/gm, '');
-// 			book.description = description;
-
-// 			// console.log(i, "calling limitText", description);
-// 			book.description = limitText(description);
-
-// 			// booksInfo.push(book);
-// 			console.log(book);
-// 			booksInfo.push(book);
-// 			// console.log(booksInfo);
-// 			// console.log(booksInfo);
-// 		// 	});
-// 		// }
-// 		})
-// 	}
-
-// 	setTimeout(function(){
-// 		res.render('rec', {book: booksInfo, alerts: req.flash()})
-// 	}, 5000)
-	
-})
-setTimeout(function(){
-	res.render('rec', {book: booksInfo, alerts: req.flash()})
-}, 2000)
-	
-
-	// res.render('rec', {book: booksInfo, alerts: req.flash()})
-
-		
-	
-	// request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
-	// 	var body = JSON.parse(body);
-	// 	var booksInfo = [];
-	// 	for (i = 0; i < body.items.length; i++) {
-			// request(body.items[i].selfLink, function(err2, response2, body2) {
-			// var body2 = JSON.parse(body2);
-	// 		
+			if (counter === body.items.length) {
+          	res.render('rec', {book: booksInfo, alerts: req.flash()})
+      		}
+		})	
+	}
+})	
 	
 });
 
