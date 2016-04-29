@@ -1,0 +1,291 @@
+body {
+	background-color: #b2e5e5;
+}
+
+h1 {
+	text-align: center;
+	margin-top: 100px;
+	font-family: 'Sansita One', cursive;
+	font-size: 75px;
+	color: #00d2ff;
+}
+
+h2 {
+	text-align: center;
+	font-family: 'Libre Baskerville', serif;
+	color: #0b5e56;
+}
+
+h3 {
+	float: left;
+	width: 75%;
+	font-family: 'Yeseva One', cursive;
+}
+
+h4 {
+	float: left;
+	width: 75%;
+	font-family: 'Libre Baskerville', serif;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+	display: block;
+	text-align: center;
+	font-family: 'Libre Baskerville', serif;
+}
+
+a {
+	color: #00d2ff;
+}
+
+a:hover {
+	color: #86becb;
+}
+
+p {
+	color: #0b5e56;
+}
+
+.btn-default {
+	background: #1aa3a3;
+	color: white;
+
+}
+
+
+
+
+.brand {
+	font-size: 55px;
+	color: #86becb;
+	margin-top: 20px;
+	font-family: 'Sansita One', cursive;
+}
+
+.nav-icon {
+	/*margin-top: 25px;*/
+}
+
+#sidebar {
+	background-color: #1aa3a3;
+}
+
+
+/*//////landing page//////*/
+
+.landing {
+	margin-top: 100px;
+}
+
+#landing-signup {
+	margin-top: 40px;
+	margin-bottom: 30px;
+}
+
+.sign-up-now {
+	text-align: center;
+	font-family: 'Arvo', serif;
+	font-size: 15px;
+	margin-top: 20px;
+}
+
+#show-books {
+	margin-top: 15px;
+}
+
+
+/*//////login page//////*/
+
+#login {
+	margin-top: 50px;
+}
+
+#signup {
+	margin-top: 50px;
+}
+
+.sign-in-here {
+	text-align: center;
+	font-family: 'Arvo', serif;
+	font-size: 15px;
+	margin-top: 20px;
+}
+
+
+
+/*//////rec page//////*/
+
+.cover-frame {
+	max-height: 462;
+	max-width: 500px;
+	text-align: center;
+	margin-top: 50px;
+}
+
+.details {
+	height: 550px;
+	max-width: 400px;
+	border: 3px solid #00d2ff;
+	padding: 20px;
+	display: none;
+	background-color: white;
+	margin: 0 auto;
+	padding-bottom: 70px;
+}
+
+.book-cover {
+	max-height: 550px;
+	max-width: 400px;
+}
+
+.title {
+	font-size: 30px;
+	font-family: 'Sansita One', cursive;
+	font-weight: bold;
+}
+
+.author {
+	font-size: 20px;
+	font-family: 'Libre Baskerville', serif;
+}
+
+.isbn {
+	font-size: 16px;
+	font-family: 'Yeseva One', cursive;
+}
+
+.rating {
+	font-size: 16px;
+	font-family: 'Yeseva One', cursive;
+}
+
+.pageCount {
+	font-size: 16px;
+	font-family: 'Yeseva One', cursive;
+}
+
+.description {
+	padding-bottom: 15px;
+	font-size: 15px;
+	font-family: 'Libre Baskerville', serif;
+}
+
+.fa-arrow-circle-o-left {
+	margin: 0 auto;
+	margin-top: 250px;
+}
+
+.fa-arrow-circle-o-right {
+	margin: 0 auto;
+	margin-top: 250px;
+}
+
+#previous {
+	float: left;
+}
+
+#add-favorite-btn {
+	float: right;
+}
+
+
+
+/*//////my-list.ejs//////*/
+
+.fav-list {
+	/*max-height: 200px;*/
+	/*background-image: #0b5e56;*/
+	height: 175px;
+	border: 3px solid #00d2ff;
+	margin-top: 15px;
+	background-color: white;
+	/*display: block;*/
+}
+
+.thumbnail {
+/*	width: 150px;*/
+	height: 150px;
+	float: left;
+	margin-right: 30px;
+	margin-left: 15px;
+	margin-top: 10px;
+	/*margin: 0 auto;*/
+	/*float: left;*/
+}
+
+.delete-btn {
+	float: right;
+	margin: 0 auto;
+	display: inline;
+	text-align: right;
+	margin-right: 15px;
+/*	margin-bottom: 50px;*/
+	/*position: absolute;*/
+}
+
+.mylist {
+	margin-top: 40px;
+}
+
+h3 {
+	float: left;
+	width: 75%;
+	margin-top: 30px;
+	font-family: 'Yeseva One', cursive;
+	font-weight: bold;
+}
+
+h4 {
+	float: left;
+	width: 75%;
+	font-family: 'Libre Baskerville', serif;
+}
+
+/*//////favoriteInfo page//////*/
+
+.more-deets {
+	margin-top: 125px;
+	border: 3px solid #00d2ff;
+	background-color: white;
+	padding: 20px;
+	width: 700px;
+}
+
+.larger-thumb {
+	height: 300px;
+	float: left;
+	margin-right: 40px;
+}
+
+#back-to-list {
+	margin: 0 auto;
+}
+
+
+/*//////media-queries//////*/
+
+@media (min-width: 768px) {
+  .bs-sidebar.affix {
+    width: 158px;
+    top: 25px;
+  }
+}
+
+@media (min-width: 992px) {
+  .bs-sidebar.affix {
+    width: 213px;
+    position: fixed;
+    top: 25px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .bs-sidebar.affix {
+    width: 263px;
+  }
+}
+
