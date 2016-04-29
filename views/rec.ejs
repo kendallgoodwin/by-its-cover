@@ -1,0 +1,92 @@
+<div class="container">
+	<!-- <div class="col-md-8 col-md-offset-2"> -->
+		<!-- <h1>Recommendation</h1> -->
+		<div class="col-md-1 col-md-offset-3">
+			<a class="dismiss-book left" href="#"><i class="fa fa-5x fa-arrow-circle-o-left" aria-hidden="true"></i></a>
+		</div>
+			<div class="col-md-7">
+				<div class="cover-frame">
+					<div class="details">
+						<p class="title"><%= book[0].title %></p><br>
+						<p class="author">by <%= book[0].author %><p>
+						<p class="isbn">ISBN <%= book[0].isbn %></p>
+						<p class="rating">Average rating: <%= book[0].rating %></p>
+						<p class="pageCount"><%= book[0].pageCount %> pages</p>
+						<p class="description"><%= book[0].description %>.</p>
+						</p>
+						<button class="btn btn-default" id="previous">Go Back</button>
+						<form action="/my-list" method="POST" id="form">
+							<input type="hidden" name="userId" id="userId" value="<%= currentUser.id %>" />
+							<input type="hidden" name="title" id="title" value="<%= book[0].title %>" />
+							<input type="hidden" name="author" id="author" value="<%= book[0].author %>" />
+							<input type="hidden" name="isbn" id="isbn" value="<%= book[0].isbn %>" />
+							<input type="hidden" name="rating" id="rating" value="<%= book[0].rating %>" />
+							<input type="hidden" name="pageCount" id="pageCount" value="<%= book[0].pageCount %>" />
+							<input type="hidden" name="description" id="description" value="<%= book[0].description %>" />
+							<input type="hidden" name="image" id="image" value="<%= book[0].image %>" />
+							<button id="add-favorite-btn" class="btn btn-default" type="submit">Add To My List</button>
+						</form>
+					</div>
+					<img class="book-cover" src="<%= book[0].image %>">	
+				</div>
+			</div>
+		<div class="col-md-1">
+			<a class="show-details" href="#"><i class="fa fa-5x fa-arrow-circle-o-right" aria-hidden="true"></i></a>
+		</div>
+	<!-- </div> -->
+</div>
+
+
+
+
+
+
+<script>
+var books = <%- JSON.stringify(book) %>;
+var current = 0;
+
+window.onload = function(){
+	console.log("ready", $)	
+
+	$('.details').hide();
+	$('.dismiss-book').on('click', dismiss)
+	$('.show-details').on('click', details)
+	$('#add-favorite-btn').on('click', submitDetails)
+	$('#previous').on('click', previous)
+
+	function submitDetails() {
+		$('#title').val(books[current].title);
+		$('#author').val(books[current].author);
+		$('#isbn').val(books[current].isbn);
+		$('#rating').val(books[current].rating);
+		$('#pageCount').val(books[current].pageCount);
+		$('#description').val(books[current].description);
+		$('#image').val(books[current].image);
+	}
+
+
+	function dismiss() {
+		current++;
+		$('.book-title').text(books[current].title)
+		$('.book-cover').attr("src", books[current].image)
+	}
+
+	function details() {
+		//current++
+		$('.book-cover').hide();
+		$('.title').text(books[current].title);
+		$('.author').text('by ' + books[current].author);
+		$('.isbn').text('ISBN ' + books[current].isbn);
+		$('.rating').text('Average rating: ' + books[current].rating);
+		$('.pageCount').text(books[current].pageCount + ' pages');
+		$('.description').text(books[current].description + '.');
+		$('.details').show();
+		console.log('details');
+	}
+
+	function previous() {
+		$('.details').hide();
+		$('.book-cover').show();
+	}
+}
+</script>
