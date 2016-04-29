@@ -6,8 +6,8 @@ var flash = require('connect-flash');
 var bcrypt = require('bcrypt');
 var request = require('request');
 var db = require('./models');
-var selflink = require('./static/text-json/selflink.json');
-var test = require('./static/text-json/test.json');
+// var selflink = require('./static/text-json/selflink.json');
+// var test = require('./static/text-json/test.json');
 
 var app = express();
 
@@ -42,11 +42,14 @@ app.get('/', function(req, res) {
 });
 
 app.post ('/', function(req, res) {
-		db.user.findOrCreate({
+	console.log("form data:", req.body);
+	db.user.findOrCreate({
 		where: {
    			$or: [{username: req.body.username}, {email: req.body.email}]
 		},
 		defaults: {
+			username: req.body.username,
+			email: req.body.email,
 			password: req.body.password
 		}
 	}).spread(function(user, isNew) {
@@ -56,23 +59,20 @@ app.post ('/', function(req, res) {
     	res.redirect('/rec');
   	} else {
   		req.flash('danger', 'Username or email already in use.')
-    	res.redirect('/sign-up');
+    	res.redirect('/');
   	}
   }).catch(function(err) {
     req.flash('danger', 'Username already taken. Please choose another name.');
-    res.redirect('/sign-up');
+    res.redirect('/');
   });
 });
 
 app.get('/rec', function(req, res) {
-	var body = test;
 	var booksInfo = [];
-	var count = 0;
 
 	var limitText = function(str) {
 	  var splitString = str.split('.');
 	  var newString = [];
-	  // console.log("splitlen:", splitString.length)
 	   for (var i = 0; i < splitString.length; i++) {
 	   		if (i < 3) {
 				newString.push(splitString[i]);
@@ -81,61 +81,80 @@ app.get('/rec', function(req, res) {
 		var shortSen = newString.join('. ');
 		return shortSen;
 	};
-
+request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=10', function(err, response, body) {
+	var body = JSON.parse(body);
 	for (var i = 0; i < body.items.length; i++) {
-		var body2 = selflink;
-		// var body2 = JSON.parse(body2);
-		// console.log(body2);
-		// var image = body2.volumeInfo.imageLinks.large;
-		var book = {};
-		book.title = body2.volumeInfo.title + ' ' + count;
-		book.author = body2.volumeInfo.authors[0];
-		book.description = body2.volumeInfo.description;
-		book.rating = Math.round(body2.volumeInfo.averageRating);
-		book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-		book.pageCount = body2.volumeInfo.pageCount;
-		book.image = body2.volumeInfo.imageLinks.large;
+		request(body.items[i].selfLink, function(err2, response2, body2) {
+			var body2 = JSON.parse(body2);
+			var book = {};
+			book.title = body2.volumeInfo.title;
+			book.author = body2.volumeInfo.authors[0];
+			book.description = body2.volumeInfo.description;
+			book.rating = Math.round(body2.volumeInfo.averageRating);
+			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+			book.pageCount = body2.volumeInfo.pageCount;
+			book.image = body2.volumeInfo.imageLinks.large;
 
-		var description = body2.volumeInfo.description;
-		description = description.replace(/<(?:.|\n)*?>/gm, '');
-		book.description = description;
+			var description = body2.volumeInfo.description;
+			description = description.replace(/<(?:.|\n)*?>/gm, '');
+			book.description = limitText(description);
+			// book.description = limitText(description);
+			booksInfo.push(book);
+		})
+		
+	};
+		
 
-		// console.log(i, "calling limitText", description);
-		book.description = limitText(description);
+// 	for (var i = 0; i < body.items.length; i++) {
+// 		request(body.items[i].selfLink, function(err2, response2, body2) {
+// 			var body2 = JSON.parse(body2);
+// 			var book = {};
+// 			book.title = body2.volumeInfo.title;
+// 			book.author = body2.volumeInfo.authors[0];
+// 			book.description = body2.volumeInfo.description;
+// 			book.rating = Math.round(body2.volumeInfo.averageRating);
+// 			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+// 			book.pageCount = body2.volumeInfo.pageCount;
+// 			book.image = body2.volumeInfo.imageLinks.large;
 
-		// booksInfo.push(book);
-		booksInfo.push(book);
-		// console.log(booksInfo);
-		// console.log(booksInfo);
-		count++;
-	} 
+// 			var description = body2.volumeInfo.description;
+// 			description = description.replace(/<(?:.|\n)*?>/gm, '');
+// 			book.description = description;
+
+// 			// console.log(i, "calling limitText", description);
+// 			book.description = limitText(description);
+
+// 			// booksInfo.push(book);
+// 			console.log(book);
+// 			booksInfo.push(book);
+// 			// console.log(booksInfo);
+// 			// console.log(booksInfo);
+// 		// 	});
+// 		// }
+// 		})
+// 	}
+
+// 	setTimeout(function(){
+// 		res.render('rec', {book: booksInfo, alerts: req.flash()})
+// 	}, 5000)
+	
+})
+setTimeout(function(){
 	res.render('rec', {book: booksInfo, alerts: req.flash()})
+}, 2000)
+	
+
+	// res.render('rec', {book: booksInfo, alerts: req.flash()})
+
+		
+	
 	// request('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=40', function(err, response, body) {
 	// 	var body = JSON.parse(body);
 	// 	var booksInfo = [];
 	// 	for (i = 0; i < body.items.length; i++) {
-	// 		request(body.items[i].selfLink, function(err2, response2, body2) {
-	// 		var body2 = JSON.parse(body2);
-	// 		console.log(body2);
-	// 		var image = body2.volumeInfo.imageLinks.large;
-	// 		// var book = {};
-	// 		// book.title = body2.volumeInfo.title;
-	// 		// book.author = body2.volumeInfo.authors[0];
-	// 		// book.description = body2.volumeInfo.description;
-	// 		// book.rating = body2.volumeInfo.averageRating;
-	// 		// book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-	// 		// book.pageCount = body2.volumeInfo.pageCount;
-	// 		// book.image = body2.volumeInfo.imageLinks.large;
-
-	// 		// booksInfo.push(book);
-			
-	// 		console.log(body.items.length);
-			
-	// 		});
-	// 		res.render('rec');
-	// 	}; 
-	// }); 
-	// //pass booksInfo into the view
+			// request(body.items[i].selfLink, function(err2, response2, body2) {
+			// var body2 = JSON.parse(body2);
+	// 		
 	
 });
 
@@ -205,32 +224,32 @@ app.delete("/my-list/:favoriteId", function(req, res) {
 
 
 
-app.get('/sign-up', function(req, res) {
-	res.render('sign-up', {alerts: req.flash()});
-});
+// app.get('/sign-up', function(req, res) {
+// 	res.render('sign-up', {alerts: req.flash()});
+// });
 
-app.post('/sign-up', function(req, res) {
-		db.user.findOrCreate({
-		where: {
-   			$or: [{username: req.body.username}, {email: req.body.email}]
-		},
-		defaults: {
-			password: req.body.password
-		}
-	}).spread(function(user, isNew) {
-  	if (isNew) {
-  		req.session.userId = user.id;
-  		req.flash('success', 'Yay! You have successfully created an account!');
-    	res.redirect('/rec');
-  	} else {
-  		req.flash('danger', 'Username or email already in use.')
-    	res.redirect('/sign-up');
-  	}
-  }).catch(function(err) {
-    req.flash('danger', 'Username already taken. Please choose another name.');
-    res.redirect('/sign-up');
-  });
-});
+// app.post('/sign-up', function(req, res) {
+// 		db.user.findOrCreate({
+// 		where: {
+//    			$or: [{username: req.body.username}, {email: req.body.email}]
+// 		},
+// 		defaults: {
+// 			password: req.body.password
+// 		}
+// 	}).spread(function(user, isNew) {
+//   	if (isNew) {
+//   		req.session.userId = user.id;
+//   		req.flash('success', 'Yay! You have successfully created an account!');
+//     	res.redirect('/rec');
+//   	} else {
+//   		req.flash('danger', 'Username or email already in use.')
+//     	res.redirect('/sign-up');
+//   	}
+//   }).catch(function(err) {
+//     req.flash('danger', 'Username already taken. Please choose another name.');
+//     res.redirect('/sign-up');
+//   });
+// });
 
 app.get('/login', function(req, res) {
 	res.render('login', {alerts: req.flash()});

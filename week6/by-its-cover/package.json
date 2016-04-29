@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "bcrypt": "^0.8.6",
     "body-parser": "^1.15.0",
     "connect-flash": "^0.1.1",
@@ -18,6 +19,8 @@
     "pg": "^4.5.3",
     "pg-hstore": "^2.3.2",
     "request": "^2.72.0",
-    "sequelize": "^3.21.0"
+    "request-promise": "^3.0.0",
+    "sequelize": "^3.21.0",
+    "wait-async": "^1.0.1"
   }
 }
