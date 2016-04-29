@@ -9,7 +9,8 @@ $( document ).ready(function() {
 });
 
 $('#sidebar').affix({
-  offset: {
+  offset: 
+  		{
     top: $('header').height()
   }
 }); 

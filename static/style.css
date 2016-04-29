@@ -140,6 +140,7 @@ p {
 .book-cover {
 	max-height: 550px;
 	max-width: 400px;
+	text-align: center;
 }
 
 .title {
@@ -271,8 +272,15 @@ h4 {
 
 @media (min-width: 768px) {
   .bs-sidebar.affix {
-    width: 158px;
-    top: 25px;
+    /*width: 158px;*/
+    width: 50px;
+    /*top: 25px;*/
+  }
+  img {
+  	width: 100px;
+  }
+  .cover-frame {
+  	width: 100px;
   }
 }
 
@@ -280,13 +288,19 @@ h4 {
   .bs-sidebar.affix {
     width: 213px;
     position: fixed;
-    top: 25px;
+/*    top: 15px;*/
   }
 }
 
 @media (min-width: 1200px) {
   .bs-sidebar.affix {
-    width: 263px;
+    width: 240px;
+  }
+  .book-cover {
+  	max-width: 800px;
+  }
+  .cover-frame {
+  	max-width: 800px;
   }
 }
 

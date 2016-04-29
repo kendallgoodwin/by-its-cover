@@ -61,10 +61,10 @@ app.post ('/', function(req, res) {
   		req.flash('danger', 'Username or email already in use.')
     	res.redirect('/');
   	}
-  }).catch(function(err) {
-    req.flash('danger', 'Username already taken. Please choose another name.');
-    res.redirect('/');
-  });
+	}).catch(function(err) {
+	req.flash('danger', 'Username already taken. Please choose another name.');
+	res.redirect('/');
+	});
 });
 
 app.get('/about', function(req, res) {
@@ -87,34 +87,33 @@ app.get('/rec', function(req, res) {
 		var shortSen = newString.join('. ');
 		return shortSen;
 	};
-request(googleLink, function(err, response, body) {
-	var body = JSON.parse(body);
-	for (var i = 0; i < body.items.length; i++) {
-		request(body.items[i].selfLink, function(err2, response2, body2) {
-			var body2 = JSON.parse(body2);
-			var book = {};
-			book.title = body2.volumeInfo.title;
-			book.author = body2.volumeInfo.authors[0];
-			book.description = body2.volumeInfo.description;
-			book.rating = Math.round(body2.volumeInfo.averageRating);
-			book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
-			book.pageCount = body2.volumeInfo.pageCount;
-			book.image = body2.volumeInfo.imageLinks.large;
+	request(googleLink, function(err, response, body) {
+		var body = JSON.parse(body);
+		for (var i = 0; i < body.items.length; i++) {
+			request(body.items[i].selfLink, function(err2, response2, body2) {
+				var body2 = JSON.parse(body2);
+				var book = {};
+				book.title = body2.volumeInfo.title;
+				book.author = body2.volumeInfo.authors[0];
+				book.description = body2.volumeInfo.description;
+				book.rating = Math.round(body2.volumeInfo.averageRating);
+				book.isbn = body2.volumeInfo.industryIdentifiers[1].identifier;
+				book.pageCount = body2.volumeInfo.pageCount;
+				book.image = body2.volumeInfo.imageLinks.large;
 
-			var description = body2.volumeInfo.description;
-			description = description.replace(/<(?:.|\n)*?>/gm, '');
-			book.description = limitText(description);
-			// book.description = limitText(description);
-			booksInfo.push(book);
-			counter++
+				var description = body2.volumeInfo.description;
+				description = description.replace(/<(?:.|\n)*?>/gm, '');
+				book.description = limitText(description);
+				book.description = limitText(description);
+				booksInfo.push(book);
+				counter++
 
-			if (counter === body.items.length) {
-          	res.render('rec', {book: booksInfo, alerts: req.flash()})
-      		}
-		})	
-	}
-})	
-	
+				if (counter === body.items.length) {
+	          	res.render('rec', {book: booksInfo, alerts: req.flash()})
+	      		}
+			})	
+		}
+	})	
 });
 
 
@@ -135,34 +134,31 @@ app.get('/my-list', function(req, res) {
 	} else {
 		req.flash('danger', 'You must be logged in to view lists');
 		res.redirect('/');
-	}
+		}
 });
 
 
 app.post('/my-list', function(req, res) {	
 	if (req.currentUser) {
 
-	db.favorite.create({
-		userId: req.body.userId,
-		title: req.body.title,
-		author: req.body.author,
-		isbn: req.body.isbn,
-		rating: req.body.rating,
-		pageCount: req.body.pageCount,
-		description: req.body.description,
-		image: req.body.image
-	}).then(function() {
-		res.redirect("/my-list");
-	}) 
+		db.favorite.create({
+			userId: req.body.userId,
+			title: req.body.title,
+			author: req.body.author,
+			isbn: req.body.isbn,
+			rating: req.body.rating,
+			pageCount: req.body.pageCount,
+			description: req.body.description,
+			image: req.body.image
+		}).then(function() {
+			res.redirect("/my-list");
+		}) 
 	} else {
 		req.flash('danger', 'You must be logged in to view lists');
 	}
 });
 
 app.get('/my-list/:id/:isbn', function(req, res) {
-	// if (!req.body.userId) {
-	// 	return res.redirect('/login');
-	// }
 
 	var userId = req.params.id;
 	var isbn = req.params.isbn;
@@ -181,34 +177,6 @@ app.delete("/my-list/:favoriteId", function(req, res) {
 		});
 });
 
-
-
-// app.get('/sign-up', function(req, res) {
-// 	res.render('sign-up', {alerts: req.flash()});
-// });
-
-// app.post('/sign-up', function(req, res) {
-// 		db.user.findOrCreate({
-// 		where: {
-//    			$or: [{username: req.body.username}, {email: req.body.email}]
-// 		},
-// 		defaults: {
-// 			password: req.body.password
-// 		}
-// 	}).spread(function(user, isNew) {
-//   	if (isNew) {
-//   		req.session.userId = user.id;
-//   		req.flash('success', 'Yay! You have successfully created an account!');
-//     	res.redirect('/rec');
-//   	} else {
-//   		req.flash('danger', 'Username or email already in use.')
-//     	res.redirect('/sign-up');
-//   	}
-//   }).catch(function(err) {
-//     req.flash('danger', 'Username already taken. Please choose another name.');
-//     res.redirect('/sign-up');
-//   });
-// });
 
 app.get('/login', function(req, res) {
 	res.render('login', {alerts: req.flash()});
