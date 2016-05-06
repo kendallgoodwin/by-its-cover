@@ -6,15 +6,29 @@ $( document ).ready(function() {
     // });
 
     console.log( "ready!" );
+
+
+
+
+// $('#sidebar').affix({
+//   offset: 
+//   		{
+//     top: $('header').height()
+//   }
+// }); 
+
+
+$( window ).resize(function() {
+    if ($(document).width() <= 991){ 
+ 		$("#sidebar-container").collapse('hide');
+    }else{
+    	$("#sidebar-container").collapse('show');
+    }
 });
 
-$('#sidebar').affix({
-  offset: 
-  		{
-    top: $('header').height()
-  }
-}); 
-
+    if ($(document).width() > 992){ 
+ 		$("#sidebar-container").collapse('show');
+    }
 
 $('.delete-btn').on('click', function(e) {
 	e.preventDefault();
@@ -27,4 +41,6 @@ $('.delete-btn').on('click', function(e) {
 			$(that).parent().parent().parent().remove();
 		}
 	});
+});
+
 });

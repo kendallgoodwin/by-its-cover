@@ -70,6 +70,10 @@ p {
 	/*margin-top: 25px;*/
 }
 
+.top-nav {
+	display: none;
+}
+
 #sidebar {
 	background-color: #1aa3a3;
 }
@@ -143,6 +147,11 @@ p {
 	text-align: center;
 }
 
+.book-cover, img {
+	margin-left:auto;
+	margin-right:auto;
+}
+
 .title {
 	font-size: 30px;
 	font-family: 'Sansita One', cursive;
@@ -178,11 +187,15 @@ p {
 .fa-arrow-circle-o-left {
 	margin: 0 auto;
 	margin-top: 250px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .fa-arrow-circle-o-right {
 	margin: 0 auto;
 	margin-top: 250px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #previous {
@@ -270,18 +283,16 @@ h4 {
 
 /*//////media-queries//////*/
 
+@media (min-width: 320px) {
+
+}
+
+@media (min-width: 480px) {
+
+}
+
 @media (min-width: 768px) {
-  .bs-sidebar.affix {
-    /*width: 158px;*/
-    width: 50px;
-    /*top: 25px;*/
-  }
-  img {
-  	width: 100px;
-  }
-  .cover-frame {
-  	width: 100px;
-  }
+
 }
 
 @media (min-width: 992px) {
@@ -290,17 +301,20 @@ h4 {
     position: fixed;
 /*    top: 15px;*/
   }
+  .top-nav {
+  	display: none;
+  }
 }
 
 @media (min-width: 1200px) {
   .bs-sidebar.affix {
     width: 240px;
   }
-  .book-cover {
-  	max-width: 800px;
-  }
-  .cover-frame {
-  	max-width: 800px;
-  }
 }
+
+
+
+
+
+
 

@@ -74,7 +74,7 @@ app.get('/about', function(req, res) {
 app.get('/rec', function(req, res) {
 	var booksInfo = [];
 	var counter = 0;
-	var googleLink = 'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=10'
+	var googleLink = 'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&startIndex=100&maxResults=20'
 
 	var limitText = function(str) {
 	  var splitString = str.split('.');
@@ -208,10 +208,6 @@ app.get('/logout', function(req, res) {
 
 
 app.listen(process.env.PORT || 3000);
-
-
-
-
 
 
 
