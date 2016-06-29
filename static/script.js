@@ -8,8 +8,6 @@ $( document ).ready(function() {
     console.log( "ready!" );
 
 
-
-
 // $('#sidebar').affix({
 //   offset: 
 //   		{
@@ -18,45 +16,45 @@ $( document ).ready(function() {
 // }); 
 
 
-$( window ).resize(function() {
-    if ($(document).width() <= 991){ 
- 		$("#sidebar-container").collapse('hide');
-    }else{
-    	$("#sidebar-container").collapse('show');
-    }
-});
+    $( window ).resize(function() {
+        if ($(document).width() <= 767){ 
+     		$("#sidebar-container").collapse('hide');
+        }else{
+        	$("#sidebar-container").collapse('show');
+        }
+    });
 
-    if ($(document).width() > 992){ 
+    if ($(document).width() > 767){ 
  		$("#sidebar-container").collapse('show');
     }
 
 
-$( window ).resize(function() {
-    if ($(document).width() <= 991){ 
+    $( window ).resize(function() {
+        if ($(document).width() <= 767){ 
+     		$(".navbar").collapse('show');
+        }else{
+        	$(".navbar").collapse('hide');
+        }
+    });
+
+    if ($(document).width() < 767){ 
  		$(".navbar").collapse('show');
-    }else{
-    	$(".navbar").collapse('hide');
-    }
-});
-
-    if ($(document).width() < 992){ 
- 		$(".navbar").collapse('show');
     }
 
 
 
 
-$('.delete-btn').on('click', function(e) {
-	e.preventDefault();
-	var favoriteId = $(this).attr('data-favorite-id');
-	var that = this;
-	$.ajax({
-		method: 'DELETE',
-		url: '/my-list/' + favoriteId,
-		success: function(){
-			$(that).parent().parent().parent().remove();
-		}
-	});
-});
+    $('.delete-btn').on('click', function(e) {
+    	e.preventDefault();
+    	var favoriteId = $(this).attr('data-favorite-id');
+    	var that = this;
+    	$.ajax({
+    		method: 'DELETE',
+    		url: '/my-list/' + favoriteId,
+    		success: function(){
+    			$(that).parent().parent().parent().remove();
+    		}
+    	});
+    });
 
 });

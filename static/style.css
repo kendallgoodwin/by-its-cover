@@ -66,16 +66,23 @@ p {
 	font-family: 'Sansita One', cursive;
 }
 
-.nav-icon {
-	/*margin-top: 25px;*/
-}
-
 .top-nav {
 	display: none;
 }
 
 #sidebar {
 	background-color: #1aa3a3;
+}
+
+.navbar {
+	background-color: #1aa3a3;
+}
+
+.collapse-brand {
+		font-size: 40px;
+		font-family: 'Sansita One', cursive;
+		color: #86becb;
+		line-height: 50px;
 }
 
 
@@ -143,7 +150,7 @@ p {
 
 .book-cover {
 	max-height: 550px;
-	max-width: 400px;
+	/*max-width: 400px;*/
 	text-align: center;
 }
 
@@ -186,14 +193,14 @@ p {
 
 .fa-arrow-circle-o-left {
 	margin: 0 auto;
-	margin-top: 250px;
+	/*margin-top: 250px;*/
 	margin-left: auto;
 	margin-right: auto;
 }
 
 .fa-arrow-circle-o-right {
 	margin: 0 auto;
-	margin-top: 250px;
+	/*margin-top: 250px;*/
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -283,17 +290,23 @@ h4 {
 
 /*//////media-queries//////*/
 
-@media (min-width: 320px) {
-
+@media screen only and (max-width: 400px) {
+	.byitscover {
+		font-size: 25px;
+		line-height: 60px;
+	}
+	.book-cover {
+		max-width: 200px !important;
+	}
+	.fa-arrow-circle-left {
+		max-width: 20px !important;
+	}
+	.collapse-brand {
+		font-size: 40px;
+		font-family: 'Sansita One', cursive;
+	}
 }
 
-@media (min-width: 480px) {
-
-}
-
-@media (min-width: 768px) {
-
-}
 
 @media (min-width: 992px) {
   .bs-sidebar.affix {
